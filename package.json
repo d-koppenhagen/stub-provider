@@ -1,7 +1,7 @@
 {
-  "name": "simple-messaging-stub-provider",
+  "name": "stub-provider",
   "version": "0.0.1",
-  "description": "A server which returns messaging stubs",
+  "description": "A server which returns javascript code stubs for processing Wonder messages and codecs",
   "main": "src/server.js",
   "scripts": {
     "start": "node src/server.js"

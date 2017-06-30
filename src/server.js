@@ -1,9 +1,3 @@
-/**
- * stub-provider
- *
- * Danny Koppenhagen <mail@d-koppenhagen.de>
- * Johannes Hamfler <jh@z7k.de>
- */
 var express = require('express');
 var cors = require('cors');
 var fs = require('fs');
@@ -18,9 +12,8 @@ app.get('/', function(req, res){
   res.send('Stub Provider is running.');
 });
 
-app.use('/stubs', express.static('stubs'), function(req, res){
-  res.send('Stub Provider is running.');
-});
+app.use('/stubs', express.static('resources/stubs'));
+app.use('/codecs', express.static('resources/codecs'));
 
 app.listen(port, function(){
   console.log((new Date()) + " Stub Provider is listening on port", port);
