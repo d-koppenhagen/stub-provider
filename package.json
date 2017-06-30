@@ -1,0 +1,28 @@
+{
+  "name": "simple-messaging-stub-provider",
+  "version": "0.0.1",
+  "description": "A server which returns messaging stubs",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js"
+  },
+  "keywords": [
+    "WebRTC",
+    "Wonder",
+    "Signalling-On-the-fly",
+    "SigOfly",
+    "Messaging",
+    "JavaScript",
+    "Stub"
+  ],
+  "authors": [
+    "Johannes Hamfler <webrtc@hamfler.com>",
+    "Danny Koppenhagen <mail@d-koppenhagen.de> (https://d-koppenhagen.de)"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "cors": "^2.8.3",
+    "express": "^4.15.3",
+    "fs": "0.0.1-security"
+  }
+}
