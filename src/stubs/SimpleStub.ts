@@ -1,4 +1,4 @@
-export class SimpleStub {
+export class MessagingStub {
   ownRtcIdentity: string;
   credentials: { any };
   websocket: any;
