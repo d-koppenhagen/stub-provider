@@ -1,0 +1,22 @@
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "outDir": "./dist",
+    "target": "es5",
+    "sourceMap": true,
+    "declaration": true,
+    "moduleResolution": "node",
+    "skipLibCheck": true,
+    "lib": [
+      "es2016",
+      "dom"
+    ]
+  },
+  "include":[
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
+

@@ -1,10 +1,10 @@
 {
   "name": "stub-provider",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A server which returns javascript code stubs for processing Wonder messages and codecs",
-  "main": "src/server.js",
+  "main": "bin/server",
   "scripts": {
-    "start": "node src/server.js"
+    "start": "tsc && node bin/server"
   },
   "keywords": [
     "WebRTC",
@@ -23,6 +23,8 @@
   "devDependencies": {
     "cors": "^2.8.3",
     "express": "^4.15.3",
-    "fs": "0.0.1-security"
+    "fs": "0.0.1-security",
+    "tslint": "^5.4.3",
+    "typescript": "^2.4.1"
   }
 }

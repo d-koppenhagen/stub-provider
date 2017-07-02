@@ -7,6 +7,6 @@ npm install
 npm start
 ```
 
-if you want to change the port just copy the file `config.example.js` to `config.js` and ajust the parameter. 
+Copy the file `config.example.js` to `config.js` and ajust the port parameter. 
 
 The folder `stubs` will served statically. All files can be accessed by HTTP GET to _http://<youripordomain>:<port>/stubs_.
