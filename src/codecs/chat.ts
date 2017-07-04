@@ -8,9 +8,12 @@ onMessage: Function = null;
   }
 
   send(input: {}, dataChannel: any) {
-    console.log('[Codec Chat] send:', input, dataChannel);
-    if (dataChannel) dataChannel.send(JSON.stringify(input)); // when used as a geneal codec for many data channels
-    else this.dataChannel.send(JSON.stringify(input)); // when instanciated only for a particular channel
+    console.log('[Codec Plain] send:', input, dataChannel);
+    if (dataChannel) { // when used as a geneal codec for many data channels
+      dataChannel.send(input);
+    } else { // when instanciated only for a particular channel
+      this.dataChannel.send(JSON.stringify(input));
+    }
   }
 
   onDataMessage(dataMsg: string) {

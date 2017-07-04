@@ -26,24 +26,24 @@ export class Codec {
   };
 
   send(input: { images; from; to; }, dataChannel: any) {
-    var that = this;
+    const that = this;
     console.log('[Codec image] send:', input, dataChannel);
-    if (!dataChannel) dataChannel = this.dataChannel;
+    if (!dataChannel) { dataChannel = this.dataChannel; }
 
-    var reader = new window.FileReader();
-    var file;
+    const reader = new window.FileReader();
+    let file;
 
     // iterate throught files
-    for (var i = 0; i < input.images.length; i++) {
+    for (let i = 0; i < input.images.length; i++) {
       file = input.images[i];
       reader.readAsDataURL(file);
       reader.onload = onReadAsDataURL;
     };
 
     function onReadAsDataURL(event, text) {
-      var data = { misc: null, message: null, last: null }; // data object to transmit over data channel
+      const data = { misc: null, message: null, last: null }; // data object to transmit over data channel
 
-      if (event) text = event.target.result; // on first invocation
+      if (event) { text = event.target.result; } // on first invocation
 
       data.misc = { // include filename and other file information in last packet
         'name': file.name,
@@ -62,10 +62,12 @@ export class Codec {
       }
       dataChannel.send(JSON.stringify(data)); // use JSON.stringify for chrome!
 
-      var remainingDataURL = text.slice(data.message.length);
-      if (remainingDataURL.length) setTimeout(function () {
-        onReadAsDataURL(null, remainingDataURL); // continue transmitting
-      }, 200)
+      const remainingDataURL = text.slice(data.message.length);
+      if (remainingDataURL.length) {
+        setTimeout(function () {
+          onReadAsDataURL(null, remainingDataURL); // continue transmitting
+        }, 200);
+      }
     }
 
   }
@@ -79,15 +81,14 @@ export class Codec {
   onDataMessage(dataMsg: { data }) {
     console.log('[Codec image] onData:', dataMsg);
 
-    var data = JSON.parse(dataMsg.data);
+    const data = JSON.parse(dataMsg.data);
 
     this._arrayToStoreChunks.push(data.message); // pushing chunks in array
     console.log('[Codec image] onData data:', data);
 
-    if (data.last) {
-      //var filename = data.misc.name || 'unknownFileName';
-      var completeFile = this._arrayToStoreChunks.join('');
-      var returnValue = {
+    if (data.last) { // var filename = data.misc.name || 'unknownFileName';
+      const completeFile = this._arrayToStoreChunks.join('');
+      const returnValue = {
         target: {
           payloadType: 'image'
         },
