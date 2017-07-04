@@ -63,9 +63,7 @@ export class Codec {
 
       const remainingDataURL = text.slice(data.message.length);
       if (remainingDataURL.length) {
-        setTimeout(function () {
-          onReadAsDataURL(null, remainingDataURL); // continue transmitting
-        }, 200)
+        setTimeout(onReadAsDataURL(null, remainingDataURL), 200); // continue transmitting
       }
     }
 
