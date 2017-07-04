@@ -8,7 +8,7 @@ export class MessagingStub {
 
   sendMessage(message: { type; from; to; conversationId, body }) {
     console.log('C->S: ', message);
-    let fullMessage = {
+    const fullMessage = {
       type: 'message',
       body: message,
       to: null,
@@ -17,11 +17,10 @@ export class MessagingStub {
 
     // Multicast support for INVITE and UPDATE
     if ((message.type === 'invitation' || message.type === 'update') && message.body.peers) {
-      this.conversations.forEach(function(element, index, array) {
-        if (element.contextId == message.conversationId)
-          array.splice(index, 1);
+      this.conversations.forEach((element, index, array) => {
+        if (element.contextId === message.conversationId) { array.splice(index, 1); }
       });
-      let conversation = {
+      const conversation = {
         contextId: message.conversationId,
         peers: message.to
       }
@@ -30,17 +29,15 @@ export class MessagingStub {
 
     // Multicast support if to is empty
     if (!message.to) {
-      var peers;
-      var that = this;
-      this.conversations.forEach(function(element, index, array) {
-        if (element.contextId == message.conversationId)
-          peers = element.peers;
+      let peers;
+      this.conversations.forEach((element, index, array) => {
+        if (element.contextId === message.conversationId) { peers = element.peers; }
       });
       message.from = message.from.rtcIdentity;
       if (peers) {
         peers.forEach(function(element, index, array) {
           fullMessage.to = element;
-          that.websocket.send(JSON.stringify(fullMessage));
+          this.websocket.send(JSON.stringify(fullMessage));
         });
       }
 
@@ -65,7 +62,6 @@ export class MessagingStub {
   };
 
   connect(ownRtcIdentity: string, credentials: { any }, msgSrv: string, callbackFunction: Function) {
-    var that = this;
     this.ownRtcIdentity = ownRtcIdentity;
     this.credentials = credentials;
     this.signalingServer = msgSrv;
@@ -80,9 +76,9 @@ export class MessagingStub {
     console.log('Opening channel: ' + this.signalingServer);
     this.websocket = new WebSocket(this.signalingServer);
 
-    var socket = this.websocket;
+    const socket = this.websocket;
     this.websocket.onopen = function() {
-      let message = {
+      const message = {
         type: 'login',
         from: ownRtcIdentity
       }
@@ -100,9 +96,9 @@ export class MessagingStub {
     };
 
     this.websocket.onmessage = function(fullMessage) {
-      var message = JSON.parse(fullMessage.data).body;
-      console.log('S->C: ',message);
-      that.onMessage(message); // give the message to the registered function to process it in wonder
+      const message = JSON.parse(fullMessage.data).body;
+      console.log('S->C: ', message);
+      this.onMessage(message); // give the message to the registered function to process it in wonder
     };
   }
 
