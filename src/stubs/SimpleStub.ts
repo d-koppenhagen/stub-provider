@@ -59,7 +59,7 @@ export class MessagingStub {
     }
     fullMessage.contextId = message.conversationId;
     this.websocket.send(JSON.stringify(fullMessage));
-  };
+  }
 
   connect(ownRtcIdentity: string, credentials: { any }, msgSrv: string, callbackFunction: Function) {
     this.ownRtcIdentity = ownRtcIdentity;
@@ -106,5 +106,5 @@ export class MessagingStub {
     this.websocket.close();
     this.websocket = null;
     console.log('Websocket connection disconnected');
-  };
+  }
 }
