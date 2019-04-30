@@ -1,11 +1,10 @@
-export class Codec {
-dataChannel: any = null;
-onMessage: Function = null;
+import { ICodec } from './codec.interface';
 
-  constructor(dataChannel, onMessage) {
-    this.dataChannel = dataChannel;
-    this.onMessage = onMessage;
-  }
+export class Codec implements ICodec {
+  constructor(
+    public dataChannel: RTCDataChannel,
+    public onMessage: (msg: any) => void
+  ) { }
 
   send(input: {}, dataChannel: any) {
     console.log('[Codec Plain] send:', input, dataChannel);

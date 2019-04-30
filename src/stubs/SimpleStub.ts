@@ -1,12 +1,14 @@
-export class MessagingStub {
-  ownRtcIdentity: string;
-  credentials: { any };
-  websocket: any;
-  conversations: any[] = [];
-  signalingServer: string = null;
+import { IMessagingStub } from './messaging-stub.interface';
+
+export class MessagingStub implements IMessagingStub {
+  ownRtcIdentity = '';
+  credentials = {};
+  websocket: any = null;
+  conversations: [{ contextId: string }] = [{ contextId: 'string' }];
+  signalingServer = '';
   onMessage: any = null;
 
-  sendMessage(message: { type; from; to; conversationId, body }) {
+  sendMessage(message: any) {
     console.log('C->S: ', message);
     const fullMessage = {
       type: 'message',
@@ -23,25 +25,24 @@ export class MessagingStub {
       const conversation = {
         contextId: message.conversationId,
         peers: message.to
-      }
+      };
       this.conversations.push(conversation);
     }
 
     // Multicast support if to is empty
     if (!message.to) {
-      let peers;
-      this.conversations.forEach((element, index, array) => {
+      let peers: any[] = [];
+      this.conversations.forEach((element: any) => {
         if (element.contextId === message.conversationId) { peers = element.peers; }
       });
       message.from = message.from.rtcIdentity;
-      if (peers) {
-        peers.forEach(function(element, index, array) {
+      if (peers.length > 0) {
+        peers.forEach((element: any) => {
           fullMessage.to = element;
           this.websocket.send(JSON.stringify(fullMessage));
         });
       }
-
-      return
+      return;
     }
 
     // From and To Identities are changed into strings containing rtcIdentities
@@ -61,15 +62,15 @@ export class MessagingStub {
     this.websocket.send(JSON.stringify(fullMessage));
   }
 
-  connect(ownRtcIdentity: string, credentials: { any }, msgSrv: string, callbackFunction: Function) {
+  connect(ownRtcIdentity: string, credentials?: any, msgSrv?: string, callbackFunction?: Function) {
     this.ownRtcIdentity = ownRtcIdentity;
     this.credentials = credentials;
-    this.signalingServer = msgSrv;
+    this.signalingServer = msgSrv || '';
 
     // If connect was already executed succesfully, it won't try to connect again, just execute the callback.
     if (this.websocket) {
       console.log('Websocket connection already opened, executing callback function: ');
-      callbackFunction();
+      if (callbackFunction) { callbackFunction(); }
       return;
     }
 
@@ -77,25 +78,25 @@ export class MessagingStub {
     this.websocket = new WebSocket(this.signalingServer);
 
     const socket = this.websocket;
-    this.websocket.onopen = function() {
+    this.websocket.onopen = () => {
       const message = {
         type: 'login',
         from: ownRtcIdentity
       }
       socket.send(JSON.stringify(message));
       console.log('Websocket connection opened and logging in as: ' + ownRtcIdentity + ' on: ' + msgSrv);
-      callbackFunction();
+      if (callbackFunction) { callbackFunction(); }
     };
 
-    this.websocket.onerror = function() {
+    this.websocket.onerror = () => {
       console.log('Websocket connection error');
     };
 
-    this.websocket.onclose = function() {
+    this.websocket.onclose = () => {
       console.log('Websocket connection closed');
     };
 
-    this.websocket.onmessage = function(fullMessage) {
+    this.websocket.onmessage = (fullMessage: any) => {
       const message = JSON.parse(fullMessage.data).body;
       console.log('S->C: ', message);
       this.onMessage(message); // give the message to the registered function to process it in wonder

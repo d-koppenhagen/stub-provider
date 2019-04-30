@@ -5,24 +5,23 @@
  * stub-provider
  */
 (function(undefined) {
-  var express = require('express');
-  var cors = require('cors');
-  var fs = require('fs');
+  const express = require('express');
+  const cors = require('cors');
 
-  var config = require('../config.js');
-  var port = config.port || 8082;
+  const config = require('../config.js');
+  const port = config.port || 8082;
 
-  var app = express();
+  const app = express();
   app.use(cors()); // enable all CORS requests
 
-  app.get('/', function(req, res){
+  app.get('/', (req, res) => {
     res.send('Stub Provider is running.');
   });
 
   app.use('/stubs', express.static('dist/stubs'));
   app.use('/codecs', express.static('dist/codecs'));
 
-  app.listen(port, function(){
-    console.log((new Date()) + " Stub Provider is listening on port", port);
+  app.listen(port, () => {
+    console.log((new Date()) + ' Stub Provider is listening on port', port);
   });
 })();

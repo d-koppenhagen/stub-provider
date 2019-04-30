@@ -1,15 +1,16 @@
+import { ICodec } from './codec.interface';
+
 declare var window: any;
 
-export class Codec {
-  dataChannel: any = null;
-  onMessage: Function = null;
+export class Codec implements ICodec {
   private _chunkLength = 10000;
-  private _arrayToStoreChunks: string[] = [];
+  private _arrayToStoreChunks: Blob[] = [];
   private _dataType = /image.*/;
 
-  constructor(dataChannel, onMessage) {
-    this.dataChannel = dataChannel;
-    this.onMessage = onMessage;
+  constructor(
+    public dataChannel: RTCDataChannel,
+    public onMessage: (msg: any) => void
+  ) {
     this._checkFileSupport();
   }
 
@@ -23,36 +24,38 @@ export class Codec {
     } else {
       alert('The File APIs are not fully supported in this browser.');
     }
-  };
+  }
 
-  send(input: { images; from; to; }, dataChannel: any) {
+  send(input: { images: any[], from: string, to: string }, dataChannel: RTCDataChannel) {
     const that = this;
     console.log('[Codec image] send:', input, dataChannel);
     if (!dataChannel) { dataChannel = this.dataChannel; }
 
     const reader = new window.FileReader();
-    let file;
+    let file: File;
 
     // iterate throught files
     for (let i = 0; i < input.images.length; i++) {
       file = input.images[i];
       reader.readAsDataURL(file);
       reader.onload = onReadAsDataURL;
-    };
+    }
 
-    function onReadAsDataURL(event, text) {
-      const data = { misc: null, message: null, last: null }; // data object to transmit over data channel
+    function onReadAsDataURL(event: any, text: any) {
+      if (event) { text = event.result; } // on first invocation
 
-      if (event) { text = event.target.result; } // on first invocation
-
-      data.misc = { // include filename and other file information in last packet
-        'name': file.name,
-        'lastModifiedDate': file.lastModifiedDate,
-        'size': file.size,
-        'type': file.type,
-        'from': input.from,
-        'to': input.to
-      }
+      const data = {
+        misc: {
+          name: file.name,
+          lastModifiedDate: file.lastModified,
+          size: file.size,
+          type: file.type,
+          from: input.from,
+          to: input.to
+        },
+        message: [],
+        last: false
+      }; // data object to transmit over data channel
 
       if (text.length > that._chunkLength) {
         data.message = text.slice(0, that._chunkLength); // getting chunk using predefined chunk length
@@ -64,9 +67,12 @@ export class Codec {
 
       const remainingDataURL = text.slice(data.message.length);
       if (remainingDataURL.length) {
-        setTimeout(onReadAsDataURL(null, remainingDataURL), 200); // continue transmitting
+        // setTimeout(onReadAsDataURL(null, remainingDataURL), 200); // continue transmitting
       }
     }
+  }
+
+  private readData(file: any, input: any) {
 
   }
 
@@ -76,7 +82,7 @@ export class Codec {
    * @desc This is the function which will be registered on the DataChannel.onmessage-function
    * @desc This function needs to modify the incoming message and send it to this.onMessage afterwards
    */
-  onDataMessage(dataMsg: { data }) {
+  onDataMessage(dataMsg: any) {
     console.log('[Codec image] onData:', dataMsg);
 
     const data = JSON.parse(dataMsg.data);
