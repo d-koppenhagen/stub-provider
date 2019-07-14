@@ -38,7 +38,7 @@ export class Codec implements ICodec {
       file = input.files[i];
       reader.readAsDataURL(file);
       reader.onload = onReadAsDataURL;
-    };
+    }
 
     function onReadAsDataURL(event: any, text: any) {
       if (event) { text = event.target.result; } // on first invocation

@@ -1,6 +1,6 @@
 {
   "name": "stub-provider",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A server which returns javascript code stubs for processing Wonder messages and codecs",
   "main": "bin/server",
   "scripts": {
@@ -22,9 +22,9 @@
   "license": "ISC",
   "devDependencies": {
     "cors": "^2.8.5",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
     "fs": "0.0.1-security",
-    "tslint": "^5.16.0",
-    "typescript": "^3.4.5"
+    "tslint": "^5.18.0",
+    "typescript": "^3.5.3"
   }
 }

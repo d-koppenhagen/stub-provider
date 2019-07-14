@@ -98,7 +98,8 @@ export class Codec implements ICodec {
         },
         type: 'message',
         data: completeFile
-      }
+      };
+
       this.onMessage(returnValue);
       this._arrayToStoreChunks = []; // resetting array
     }

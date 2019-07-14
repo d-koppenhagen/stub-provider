@@ -4,7 +4,7 @@
 /**
  * stub-provider
  */
-(function(undefined) {
+(function() {
   const express = require('express');
   const cors = require('cors');
 
