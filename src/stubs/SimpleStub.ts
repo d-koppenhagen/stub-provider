@@ -1,6 +1,6 @@
 import { IMessagingStub } from './messaging-stub.interface';
 
-export class MessagingStub implements IMessagingStub {
+export default class MessagingStub implements IMessagingStub {
   ownRtcIdentity = '';
   credentials = {};
   websocket: any = null;
